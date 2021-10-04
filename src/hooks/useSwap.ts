@@ -92,6 +92,7 @@ export const useSwap = ({
   return {
     ...rest,
     simulated: simData,
+    minReceive,
     swap: submit,
   };
 };
