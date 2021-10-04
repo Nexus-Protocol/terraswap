@@ -1,0 +1,50 @@
+{
+  "name": "@arthuryeti/terraswap",
+  "version": "0.1.1",
+  "author": "itey.arthur@gmail.com",
+  "license": "MIT",
+  "repository": "https://github.com/arthuryeti/terra.git",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@arthuryeti/terra": "^0.1.7",
+    "@rollup/plugin-commonjs": "^21.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.5",
+    "@terra-money/terra.js": "^2.0.14",
+    "@terra-money/wallet-provider": "^2.2.0",
+    "@types/lodash": "^4.14.175",
+    "@types/numeral": "^2.0.2",
+    "@types/react": "^17.0.27",
+    "@types/react-dom": "^17.0.9",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.26.0",
+    "bignumber.js": "^9.0.1",
+    "graphql-request": "^3.5.0",
+    "lodash": "^4.17.21",
+    "numeral": "^2.0.6",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-query": "^3.25.1",
+    "rollup": "^2.58.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.3"
+  }
+}
