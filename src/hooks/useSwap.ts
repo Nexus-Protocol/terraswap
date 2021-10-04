@@ -5,7 +5,6 @@ import {
   useAddress,
   useTransaction,
 } from "@arthuryeti/terra";
-import {} from "lodash";
 
 import useContracts from "./useContracts";
 import { useSwapRoute } from "./useSwapRoute";
@@ -50,10 +49,8 @@ export const useSwap = ({
     }
 
     return minAmountReceive({
-      offerAmount: simData.amount,
-      maxSpread: simData.spread,
-      beliefPrice: simData.price,
-      commission: simData.commission,
+      amount: simData.amount,
+      maxSpread: slippage,
     });
   }, [simData]);
 

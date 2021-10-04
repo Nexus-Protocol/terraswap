@@ -1,23 +1,18 @@
 import BigNumber from "bignumber.js";
 
 type minAmountReceiveParams = {
-  offerAmount: string;
-  beliefPrice: string;
+  amount: string;
   maxSpread: string;
-  commission: string;
 };
 
 export const minAmountReceive = ({
-  offerAmount,
-  beliefPrice,
+  amount,
   maxSpread,
-  commission,
 }: minAmountReceiveParams): string => {
-  const amount = new BigNumber(offerAmount).div(beliefPrice);
   const rate1 = new BigNumber(1).minus(maxSpread);
-  const rate2 = new BigNumber(1).minus(commission);
+  const rate2 = new BigNumber(1).minus("0.003"); // terraswap commission
 
-  return amount.times(rate1).times(rate2).toString();
+  return new BigNumber(amount).times(rate1).times(rate2).toString();
 };
 
 type PriceImpactParams = {
