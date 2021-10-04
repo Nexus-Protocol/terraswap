@@ -14,9 +14,5 @@ You need to use `<TerraProvider data={data}>...</TerraProvider>`, where data is 
     tokens: {},
     pairs: []
   }
-  "bombay": {
-    tokens: {},
-    pairs: []
-  }
 }
 ```
