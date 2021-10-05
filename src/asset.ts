@@ -67,7 +67,17 @@ export const getTokenDenom = (info: AssetInfo): string => {
   }
 
   //@ts-expect-error
-  return info.token?.contract_addr;
+  return info.token.contract_addr;
+};
+
+export const getTokenAmount = (info: AssetInfo): string => {
+  if (isNativeAsset(info)) {
+    //@ts-expect-error
+    return info.native_token.amount;
+  }
+
+  //@ts-expect-error
+  return info.token.amount;
 };
 
 export const getTokenDenoms = (infos: AssetInfo[]): string[] => {

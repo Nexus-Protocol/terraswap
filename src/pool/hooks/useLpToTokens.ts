@@ -9,7 +9,7 @@ type Params = {
   amount: string;
 };
 
-export const useFromLpToTokens: any = ({ pool, amount }: Params) => {
+export const useLpToTokens: any = ({ pool, amount }: Params) => {
   return useMemo(() => {
     if (pool == null || amount == null || BN(amount).isEqualTo(0)) {
       return null;
@@ -30,4 +30,4 @@ export const useFromLpToTokens: any = ({ pool, amount }: Params) => {
   }, [pool, amount]);
 };
 
-export default useFromLpToTokens;
+export default useLpToTokens;

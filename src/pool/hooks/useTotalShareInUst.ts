@@ -4,7 +4,7 @@ import { BN } from "@arthuryeti/terra";
 import { getTokenDenom } from "../../asset";
 import { PoolResponse } from "../../types";
 import { useTokenPriceInUst } from "../../hooks/useTokenPriceInUst";
-import { useFromLpToTokens } from "./useFromLpToTokens";
+import { useLpToTokens } from "./useLpToTokens";
 import { ONE_TOKEN } from "../../constants";
 
 type Params = {
@@ -16,7 +16,7 @@ export const useTotalShareInUst = ({ pool }: Params) => {
   const token2 = pool && getTokenDenom(pool?.assets[1].info);
   const token1Price = useTokenPriceInUst(token1);
   const token2Price = useTokenPriceInUst(token2);
-  const tokenAmounts = useFromLpToTokens({ pool, amount: pool?.total_share });
+  const tokenAmounts = useLpToTokens({ pool, amount: pool?.total_share });
 
   return useMemo(() => {
     if (
