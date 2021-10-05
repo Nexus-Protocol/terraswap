@@ -1,11 +1,8 @@
-import {
-  getTokenDenom,
-  isNativeToken,
-  findAsset,
-  toBase64,
-} from "@arthuryeti/terra";
+import { toBase64 } from "@arthuryeti/terra";
 import { LCDClient, Coin, MsgExecuteContract } from "@terra-money/terra.js";
-import { PairResponse } from "./types";
+
+import { PairResponse } from "../types";
+import { getTokenDenom, isNativeAsset, findAsset } from "../asset";
 
 type GetSwapOperationsParams = {
   token: string;
@@ -25,7 +22,6 @@ export const getSwapOperations = ({
   const [{ asset_infos }] = swapRoute;
 
   const sortedAssets = [...asset_infos].sort((a) => {
-    // @ts-expect-error
     return getTokenDenom(a) === token ? -1 : 1;
   });
 
@@ -36,7 +32,7 @@ export const getSwapOperations = ({
     },
   };
 
-  if (sortedAssets.every(isNativeToken)) {
+  if (sortedAssets.every(isNativeAsset)) {
     operation = {
       native_swap: {
         // @ts-expect-error
@@ -47,7 +43,6 @@ export const getSwapOperations = ({
     };
   }
 
-  // @ts-expect-error
   const nextToken = getTokenDenom(sortedAssets[1]);
 
   return getSwapOperations({
@@ -101,10 +96,9 @@ const createSwapMsgs = (
 
   const [{ asset_infos }] = swapRoute;
 
-  // @ts-expect-error
   const info = findAsset(asset_infos, token);
 
-  const isNative = isNativeToken(info);
+  const isNative = isNativeAsset(info);
 
   const operations = getSwapOperations({ token, swapRoute });
 

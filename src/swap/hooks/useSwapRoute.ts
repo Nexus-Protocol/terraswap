@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { PairResponse } from "../types";
+import { PairResponse } from "../../types";
 
 type Params = {
   routes: any;
@@ -14,7 +14,7 @@ export const useSwapRoute = ({
   token2,
 }: Params): PairResponse[] | null => {
   return useMemo(() => {
-    if (!routes[token1]) {
+    if (!routes[token1] || token1 == null) {
       return null;
     }
 

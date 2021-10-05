@@ -1,17 +1,13 @@
 import { useMemo } from "react";
-import {
-  useTerra,
-  isValidAmount,
-  useAddress,
-  useTransaction,
-} from "@arthuryeti/terra";
+import { useAddress, useTransaction } from "@arthuryeti/terra";
 
-import useContracts from "./useContracts";
+import useContracts from "../../hooks/useContracts";
 import { useSwapRoute } from "./useSwapRoute";
 import useSwapSimulate from "./useSwapSimulate";
 import monoSwap from "../monoSwap";
 import multiSwap from "../multiSwap";
-import { minAmountReceive } from "../math";
+import { minAmountReceive } from "../helpers";
+import { useTerraswap } from "../../context";
 
 type Params = {
   token1: string;
@@ -29,7 +25,7 @@ export const useSwap = ({
   slippage,
   onSuccess,
 }: Params) => {
-  const { routes } = useTerra();
+  const { routes } = useTerraswap();
   const address = useAddress();
   const contracts = useContracts();
   const swapRoute = useSwapRoute({ routes, token1, token2 });
@@ -55,7 +51,7 @@ export const useSwap = ({
   }, [simData]);
 
   const msgs = useMemo(() => {
-    if (!isValidAmount(amount) || swapRoute == null) {
+    if (swapRoute == null || amount == null) {
       return null;
     }
 

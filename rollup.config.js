@@ -23,7 +23,8 @@ export default {
     "react-dom",
     "@terra-money/terra.js",
     "@terra-money/wallet-provider",
-    "graphql-request",
+    "@arthuryeti/terra",
+    "react-query",
     "bignumber.js",
   ],
 };

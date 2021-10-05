@@ -1,10 +1,13 @@
-import { useTerra } from "@arthuryeti/terra";
+import { BN } from "@arthuryeti/terra";
 import { ONE_TOKEN, ESTIMATE_TOKEN } from "../constants";
-import { useSwapSimulate } from "./useSwapSimulate";
+import { useTerraswap } from "../context";
+import { useSwapSimulate } from "../swap";
 
 export const useTokenPriceInUst = (token1: string) => {
-  const { routes } = useTerra();
-  const data = useSwapSimulate({
+  const { routes } = useTerraswap();
+
+  // TODO: Change type
+  const data: any = useSwapSimulate({
     routes,
     amount: String(ONE_TOKEN),
     token1,
@@ -12,7 +15,15 @@ export const useTokenPriceInUst = (token1: string) => {
     reverse: false,
   });
 
-  return data?.price;
+  if (token1 == "uusd") {
+    return String(ONE_TOKEN);
+  }
+
+  if (data == null) {
+    return null;
+  }
+
+  return BN("1").div(data.price).times(ONE_TOKEN).toFixed();
 };
 
 export default useTokenPriceInUst;

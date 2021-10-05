@@ -1,16 +1,13 @@
-import {
-  toToken,
-  createAsset,
-  isNativeToken,
-  toBase64,
-} from "@arthuryeti/terra";
+import { toBase64 } from "@arthuryeti/terra";
 import { LCDClient, Coin, MsgExecuteContract } from "@terra-money/terra.js";
+
+import { isNativeAsset, toAsset, createAsset } from "../asset";
 
 import {
   PairResponse,
   SimulationResponse,
   ReverseSimulationResponse,
-} from "./types";
+} from "../types";
 
 type GetQueryParams = {
   client: LCDClient;
@@ -32,14 +29,14 @@ export const simulate = ({
   if (reverse) {
     return client.wasm.contractQuery<ReverseSimulationResponse>(contract_addr, {
       reverse_simulation: {
-        ask_asset: toToken({ token, amount }),
+        ask_asset: toAsset({ token, amount }),
       },
     });
   }
 
   return client.wasm.contractQuery<SimulationResponse>(contract_addr, {
     simulation: {
-      offer_asset: toToken({ token, amount }),
+      offer_asset: toAsset({ token, amount }),
     },
   });
 };
@@ -57,10 +54,9 @@ const createSwapMsgs = (
 ) => {
   const [{ contract_addr }] = swapRoute;
 
-  // @ts-expect-error
   const offerAsset = createAsset(token, amount, swapRoute);
 
-  const isNative = isNativeToken(offerAsset.info);
+  const isNative = isNativeAsset(offerAsset.info);
 
   if (isNative) {
     return [

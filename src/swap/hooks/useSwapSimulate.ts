@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { useTerra } from "@arthuryeti/terra";
+import { useTerraWebapp } from "@arthuryeti/terra";
 import { useQuery } from "react-query";
 import BigNumber from "bignumber.js";
 
-import useContracts from "./useContracts";
+import useContracts from "../../hooks/useContracts";
 import { useSwapRoute } from "./useSwapRoute";
 import monoSwap from "../monoSwap";
 import multiSwap from "../multiSwap";
@@ -23,7 +23,7 @@ export const useSwapSimulate = ({
   amount,
   reverse,
 }: Params) => {
-  const { client } = useTerra();
+  const { client } = useTerraWebapp();
   const contracts = useContracts();
   const swapRoute = useSwapRoute({ routes, token1, token2 });
   const router = contracts.router;
