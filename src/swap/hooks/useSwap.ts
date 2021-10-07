@@ -53,7 +53,7 @@ export const useSwap = ({
 
   const msgs = useMemo(() => {
     if (swapRoute == null || amount == null) {
-      return null;
+      return [];
     }
 
     if (swapRoute.length > 1) {
@@ -80,7 +80,6 @@ export const useSwap = ({
     );
   }, [address, token1, amount, minReceive, slippage, router, swapRoute]);
 
-  // @ts-expect-error
   const { submit, ...rest } = useTransaction({ msgs, onSuccess, onError });
 
   return {

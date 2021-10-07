@@ -51,7 +51,7 @@ type CreateSwapMsgsOpts = {
 const createSwapMsgs = (
   { swapRoute, token, amount, slippage }: CreateSwapMsgsOpts,
   sender: string
-) => {
+): MsgExecuteContract[] => {
   const [{ contract_addr }] = swapRoute;
 
   const offerAsset = createAsset(token, amount, swapRoute);
