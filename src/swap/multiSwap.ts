@@ -89,9 +89,9 @@ type CreateSwapMsgsOpts = {
 const createSwapMsgs = (
   { swapRoute, token, router, amount, minReceive }: CreateSwapMsgsOpts,
   sender: string
-): MsgExecuteContract[] => {
+): MsgExecuteContract[] | null => {
   if (minReceive == null) {
-    return [];
+    return null;
   }
 
   const [{ asset_infos }] = swapRoute;

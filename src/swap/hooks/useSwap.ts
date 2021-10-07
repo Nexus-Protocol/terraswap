@@ -53,7 +53,7 @@ export const useSwap = ({
 
   const msgs = useMemo(() => {
     if (swapRoute == null || amount == null) {
-      return [];
+      return null;
     }
 
     if (swapRoute.length > 1) {
