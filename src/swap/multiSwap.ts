@@ -13,9 +13,9 @@ type GetSwapOperationsParams = {
 export const getSwapOperations = ({
   token,
   swapRoute,
-  operations,
+  operations = [],
 }: GetSwapOperationsParams): any | any[] => {
-  if (swapRoute.length === 0) {
+  if (swapRoute == null || swapRoute.length === 0) {
     return operations;
   }
 

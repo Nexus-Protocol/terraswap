@@ -14,8 +14,8 @@ type Params = {
   token2: string;
   amount: string;
   slippage: string;
-  onSuccess: () => void;
-  onError: () => void;
+  onSuccess?: (txHash: string) => void;
+  onError?: (txHash?: string) => void;
 };
 
 export const useSwap = ({
@@ -24,6 +24,7 @@ export const useSwap = ({
   amount,
   slippage,
   onSuccess,
+  onError,
 }: Params) => {
   const { routes } = useTerraswap();
   const address = useAddress();
@@ -80,7 +81,7 @@ export const useSwap = ({
   }, [address, token1, amount, minReceive, slippage, router, swapRoute]);
 
   // @ts-expect-error
-  const { submit, ...rest } = useTransaction({ msgs, onSuccess });
+  const { submit, ...rest } = useTransaction({ msgs, onSuccess, onError });
 
   return {
     ...rest,

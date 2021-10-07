@@ -78,7 +78,7 @@ const createSwapMsgs = (
     new MsgExecuteContract(sender, token, {
       send: {
         amount,
-        contract_addr,
+        contract: contract_addr,
         msg: toBase64({
           swap: {
             max_spread: slippage,
