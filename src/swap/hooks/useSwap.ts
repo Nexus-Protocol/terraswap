@@ -32,7 +32,7 @@ export const useSwap = ({
   const swapRoute = useSwapRoute({ routes, token1, token2 });
   const router = contracts.router;
 
-  const simData = useSwapSimulate({
+  const simulated = useSwapSimulate({
     routes,
     amount: amount ?? "1000000",
     token1,
@@ -41,15 +41,15 @@ export const useSwap = ({
   });
 
   const minReceive = useMemo(() => {
-    if (simData == null) {
+    if (simulated == null) {
       return null;
     }
 
     return minAmountReceive({
-      amount: simData.amount,
+      amount: simulated.amount,
       maxSpread: slippage,
     });
-  }, [simData]);
+  }, [simulated]);
 
   const msgs = useMemo(() => {
     if (swapRoute == null || amount == null) {
@@ -84,7 +84,7 @@ export const useSwap = ({
 
   return {
     ...rest,
-    simulated: simData,
+    simulated,
     minReceive,
     swap: submit,
   };
