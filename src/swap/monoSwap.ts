@@ -46,10 +46,11 @@ type CreateSwapMsgsOpts = {
   token: string;
   amount: string;
   slippage: string;
+  price: string;
 };
 
 const createSwapMsgs = (
-  { swapRoute, token, amount, slippage }: CreateSwapMsgsOpts,
+  { swapRoute, token, amount, slippage, price }: CreateSwapMsgsOpts,
   sender: string
 ): MsgExecuteContract[] => {
   const [{ contract_addr }] = swapRoute;
@@ -67,6 +68,7 @@ const createSwapMsgs = (
           swap: {
             offer_asset: offerAsset,
             max_spread: slippage,
+            belief_price: price,
           },
         },
         [new Coin(token, amount)]
@@ -82,6 +84,7 @@ const createSwapMsgs = (
         msg: toBase64({
           swap: {
             max_spread: slippage,
+            belief_price: price,
           },
         }),
       },

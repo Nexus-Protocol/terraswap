@@ -52,7 +52,7 @@ export const useSwap = ({
   }, [simulated]);
 
   const msgs = useMemo(() => {
-    if (swapRoute == null || amount == null) {
+    if (swapRoute == null || amount == null || simulated == null) {
       return null;
     }
 
@@ -75,10 +75,20 @@ export const useSwap = ({
         swapRoute,
         amount,
         slippage,
+        price: simulated.price,
       },
       address
     );
-  }, [address, token1, amount, minReceive, slippage, router, swapRoute]);
+  }, [
+    address,
+    token1,
+    amount,
+    simulated,
+    minReceive,
+    slippage,
+    router,
+    swapRoute,
+  ]);
 
   const { submit, ...rest } = useTransaction({ msgs, onSuccess, onError });
 
