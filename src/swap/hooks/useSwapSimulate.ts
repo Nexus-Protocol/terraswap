@@ -1,7 +1,6 @@
 import { useMemo } from "react";
-import { useTerraWebapp } from "@arthuryeti/terra";
+import { BN, useTerraWebapp } from "@arthuryeti/terra";
 import { useQuery } from "react-query";
-import BigNumber from "bignumber.js";
 
 import useContracts from "../../hooks/useContracts";
 import { useSwapRoute } from "./useSwapRoute";
@@ -71,8 +70,9 @@ export const useSwapSimulate = ({
         amount: data.offer_amount,
         spread,
         commission,
-        price: new BigNumber(amount)
-          .div(data.offer_amount)
+        price: BN(amount).div(data.offer_amount).toFixed(6).toString(),
+        price2: BN("1")
+          .div(BN(amount).div(data.offer_amount))
           .toFixed(6)
           .toString(),
       };
@@ -82,8 +82,9 @@ export const useSwapSimulate = ({
       amount: data.return_amount,
       spread,
       commission,
-      price: new BigNumber(amount)
-        .div(data.return_amount)
+      price: BN(amount).div(data.return_amount).toFixed(6).toString(),
+      price2: BN("1")
+        .div(BN(amount).div(data.return_amount))
         .toFixed(6)
         .toString(),
     };
