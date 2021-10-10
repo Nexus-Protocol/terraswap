@@ -38,7 +38,11 @@ export const useSwapRoute = ({
       return [routes[token1].uluna, routes.uluna.uusd, routes.uusd[token2]];
     }
 
-    return [routes[token1].uusd, routes.uusd.uluna, routes.uluna[token2]];
+    if (routes[token1].uusd && routes.uluna[token2]) {
+      return [routes[token1].uusd, routes.uusd.uluna, routes.uluna[token2]];
+    }
+
+    return null;
   }, [routes, token1, token2]);
 };
 
