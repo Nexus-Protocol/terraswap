@@ -80,7 +80,7 @@ export const useSwap = ({
         swapRoute,
         amount,
         slippage,
-        price: simulated.price2,
+        price: simulated.price,
       },
       address,
     );
