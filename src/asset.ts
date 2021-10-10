@@ -1,4 +1,15 @@
-import { AssetInfo, PairResponse } from "./types";
+import {
+  AssetInfo,
+  CW20AssetInfo,
+  NativeAssetInfo,
+  PairResponse,
+} from "./types";
+
+export function isTypeNativeAssetInfo(
+  value: NativeAssetInfo | CW20AssetInfo,
+): value is NativeAssetInfo {
+  return value.hasOwnProperty("native_token");
+}
 
 export const isNativeToken = (token: string = ""): boolean => {
   return token.startsWith("u");
@@ -29,13 +40,11 @@ export const toAsset = ({ amount, token }: ToAssetOpts) => {
 };
 
 export const findAsset = (infos: AssetInfo[], token: string) => {
-  const asset = infos.find((info) => {
-    if (isNativeAsset(info)) {
-      // @ts-expect-error
+  const asset = infos.find(info => {
+    if (isTypeNativeAssetInfo(info)) {
       return info.native_token.denom === token;
     }
 
-    // @ts-expect-error
     return info.token.contract_addr === token;
   });
 
@@ -49,8 +58,8 @@ export const findAsset = (infos: AssetInfo[], token: string) => {
 export const createAsset = (
   from: string,
   amount: string,
-  route: PairResponse[]
-): any => {
+  route: PairResponse[],
+) => {
   const [{ asset_infos }] = route;
   const info = findAsset(asset_infos, from);
 
@@ -61,25 +70,13 @@ export const createAsset = (
 };
 
 export const getTokenDenom = (info: AssetInfo): string => {
-  if (isNativeAsset(info)) {
-    //@ts-expect-error
+  if (isTypeNativeAssetInfo(info)) {
     return info.native_token.denom;
   }
 
-  //@ts-expect-error
   return info.token.contract_addr;
 };
 
-export const getTokenAmount = (info: AssetInfo): string => {
-  if (isNativeAsset(info)) {
-    //@ts-expect-error
-    return info.native_token.amount;
-  }
-
-  //@ts-expect-error
-  return info.token.amount;
-};
-
 export const getTokenDenoms = (infos: AssetInfo[]): string[] => {
-  return infos.map((info) => getTokenDenom(info));
+  return infos.map(info => getTokenDenom(info));
 };

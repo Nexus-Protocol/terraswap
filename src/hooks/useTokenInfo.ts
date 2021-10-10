@@ -8,31 +8,27 @@ export const useTokenInfo = () => {
   const { data } = useTerraswap();
 
   const getSymbol = useCallback(
-    (token: string) => {
-      if (data == null) {
-        return token;
+    (token: string | null) => {
+      if (data == null || token == null) {
+        return null;
       }
 
-      return data[network.name].tokens[token]?.symbol ?? token;
+      return data[network.name].tokens[token].symbol || token;
     },
-    [network.name, data]
+    [network.name, data],
   );
 
   const getIcon = useCallback(
-    (token: string) => {
-      if (data == null) {
-        return "";
+    (token: string | null) => {
+      if (data == null || token == null) {
+        return null;
       }
 
       const info = data[network.name].tokens[token];
 
-      if (info?.icon) {
-        return info?.icon;
-      }
-
-      return "";
+      return info.icon || null;
     },
-    [network.name, data]
+    [network.name, data],
   );
 
   return {

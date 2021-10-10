@@ -1,15 +1,15 @@
 import { useMemo } from "react";
-import { BN } from "@arthuryeti/terra";
+import { num } from "@arthuryeti/terra";
 
-import { useShareOfPool } from "./useShareOfPool";
 import { PoolResponse } from "../../types";
+import { useShareOfPool } from "./useShareOfPool";
 
 type Params = {
-  pool: PoolResponse;
-  amount1: string;
+  pool: PoolResponse | null;
+  amount1: string | null;
 };
 
-export const useTokensToLp: any = ({ pool, amount1 }: Params) => {
+export const useTokensToLp = ({ pool, amount1 }: Params): string | null => {
   const shareOfPool = useShareOfPool({ pool, amount1 });
 
   return useMemo(() => {
@@ -17,13 +17,13 @@ export const useTokensToLp: any = ({ pool, amount1 }: Params) => {
       pool == null ||
       amount1 == null ||
       shareOfPool == null ||
-      BN(amount1).isEqualTo(0)
+      num(amount1).isEqualTo(0)
     ) {
       return null;
     }
 
-    return BN(shareOfPool).times(pool.total_share).toFixed();
-  }, [pool, amount1]);
+    return num(shareOfPool).times(pool.total_share).toFixed();
+  }, [pool, shareOfPool, amount1]);
 };
 
 export default useTokensToLp;

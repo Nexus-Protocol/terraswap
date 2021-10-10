@@ -1,13 +1,12 @@
-import { BN } from "@arthuryeti/terra";
+import { num } from "@arthuryeti/terra";
 import { ONE_TOKEN, ESTIMATE_TOKEN } from "../constants";
 import { useTerraswap } from "../context";
 import { useSwapSimulate } from "../swap";
 
-export const useTokenPriceInUst = (token1: string) => {
+export const useTokenPriceInUst = (token1: string | null) => {
   const { routes } = useTerraswap();
 
-  // TODO: Change type
-  const data: any = useSwapSimulate({
+  const data = useSwapSimulate({
     routes,
     amount: String(ONE_TOKEN),
     token1,
@@ -23,7 +22,7 @@ export const useTokenPriceInUst = (token1: string) => {
     return null;
   }
 
-  return BN("1").div(data.price).times(ONE_TOKEN).toFixed();
+  return num("1").div(data.price).times(ONE_TOKEN).toFixed();
 };
 
 export default useTokenPriceInUst;

@@ -17,13 +17,12 @@ export type Routes = {
   };
 };
 
-export type Data = {
-  mainnet: {
-    tokens: any;
-    pairs: any;
-  };
-  testnet: {
-    tokens: any;
-    pairs: any;
-  };
+export type DataNetwork = {
+  tokens: Tokens;
+  pairs: PairResponse[];
 };
+
+export type Data = {
+  mainnet: DataNetwork;
+  testnet: DataNetwork;
+} & { [key: string]: DataNetwork };

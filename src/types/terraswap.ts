@@ -102,3 +102,19 @@ export type ReverseSimulationResponse = {
   offer_amount: string;
   spread_amount: string;
 };
+
+export type NativeSwapOperation = {
+  native_swap: {
+    offer_denom: string;
+    ask_denom: string;
+  };
+};
+
+export type CW20SwapOperation = {
+  terra_swap: {
+    offer_asset_info: AssetInfo;
+    ask_asset_info: AssetInfo;
+  };
+};
+
+export type SwapOperation = NativeSwapOperation | CW20SwapOperation;

@@ -9,9 +9,9 @@ type Contracts = {
 type Networks = {
   mainnet: Contracts;
   testnet: Contracts;
-};
+} & { [key: string]: Contracts };
 
-const defaultContracts = {
+const defaultContracts: Networks = {
   mainnet: {
     factory: "terra1ulgw0td86nvs4wtpsc80thv6xelk76ut7a7apj",
     router: "terra19qx5xe6q9ll4w0890ux7lv2p4mf3csd4qvt3ex",
@@ -28,7 +28,7 @@ export const useContracts = (initial?: Networks): Contracts => {
 
   return useMemo(() => {
     return contracts[network.name];
-  }, [contracts, name]);
+  }, [contracts, network]);
 };
 
 export default useContracts;

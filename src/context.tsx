@@ -1,4 +1,4 @@
-import {
+import React, {
   FC,
   ReactNode,
   useMemo,
@@ -13,16 +13,16 @@ import { PairResponse, Routes, Tokens, Data } from "./types";
 import { formatPairsToRoutes } from "./helpers";
 
 type Terraswap = {
-  pairs: PairResponse[] | any[];
-  routes: Routes | any[];
-  tokens: Tokens | any[];
+  pairs: PairResponse[] | null;
+  routes: Routes | null;
+  tokens: Tokens | null;
   data: Data | null;
 };
 
 export const TerraswapContext: Context<Terraswap> = createContext<Terraswap>({
   pairs: [],
-  routes: [],
-  tokens: [],
+  routes: null,
+  tokens: null,
   data: null,
 });
 
@@ -36,15 +36,15 @@ export const TerraswapProvider: FC<Props> = ({ children, data }) => {
 
   const pairs = useMemo(() => {
     return data[network.name].pairs;
-  }, [network.name]);
+  }, [data, network.name]);
 
   const tokens = useMemo(() => {
     return data[network.name].tokens;
-  }, [network.name]);
+  }, [data, network.name]);
 
   const routes = useMemo(() => {
-    if (!pairs) {
-      return [];
+    if (pairs.length == 0) {
+      return null;
     }
     return formatPairsToRoutes(pairs);
   }, [pairs]);

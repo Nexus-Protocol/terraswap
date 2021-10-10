@@ -1,17 +1,21 @@
 import { useMemo } from "react";
-import { BN } from "@arthuryeti/terra";
+import { num } from "@arthuryeti/terra";
 
 import { getTokenDenom } from "../../asset";
 import { PoolResponse } from "../../types";
 
+type Response = {
+  [key: string]: string;
+} | null;
+
 type Params = {
-  pool: PoolResponse;
-  amount: string;
+  pool: PoolResponse | null;
+  amount: string | null | undefined;
 };
 
-export const useLpToTokens: any = ({ pool, amount }: Params) => {
+export const useLpToTokens = ({ pool, amount }: Params): Response => {
   return useMemo(() => {
-    if (pool == null || amount == null || BN(amount).isEqualTo(0)) {
+    if (pool == null || amount == null || num(amount).isEqualTo(0)) {
       return null;
     }
 
@@ -20,12 +24,12 @@ export const useLpToTokens: any = ({ pool, amount }: Params) => {
     return assets.reduce(
       (acc, asset) => ({
         ...acc,
-        [getTokenDenom(asset.info)]: BN(amount)
+        [getTokenDenom(asset.info)]: num(amount)
           .times(asset.amount)
           .div(total_share)
           .toFixed(),
       }),
-      {}
+      {},
     );
   }, [pool, amount]);
 };

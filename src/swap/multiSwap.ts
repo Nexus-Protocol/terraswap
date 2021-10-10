@@ -1,43 +1,46 @@
 import { toBase64 } from "@arthuryeti/terra";
 import { LCDClient, Coin, MsgExecuteContract } from "@terra-money/terra.js";
 
-import { PairResponse } from "../types";
-import { getTokenDenom, isNativeAsset, findAsset } from "../asset";
+import { PairResponse, SwapOperation } from "../types";
+import {
+  getTokenDenom,
+  isNativeAsset,
+  findAsset,
+  isTypeNativeAssetInfo,
+} from "../asset";
 
 type GetSwapOperationsParams = {
   token: string;
-  swapRoute: PairResponse[];
-  operations?: any[] | any;
+  swapRoute: PairResponse[] | null;
+  operations?: SwapOperation[];
 };
 
 export const getSwapOperations = ({
   token,
   swapRoute,
   operations = [],
-}: GetSwapOperationsParams): any | any[] => {
+}: GetSwapOperationsParams): SwapOperation[] => {
   if (swapRoute == null || swapRoute.length === 0) {
     return operations;
   }
 
   const [{ asset_infos }] = swapRoute;
 
-  const sortedAssets = [...asset_infos].sort((a) => {
+  const sortedAssets = [...asset_infos].sort(a => {
     return getTokenDenom(a) === token ? -1 : 1;
   });
 
-  let operation: any = {
+  let operation: SwapOperation = {
     terra_swap: {
       offer_asset_info: sortedAssets[0],
       ask_asset_info: sortedAssets[1],
     },
   };
 
-  if (sortedAssets.every(isNativeAsset)) {
+  if (sortedAssets.every(isTypeNativeAssetInfo)) {
     operation = {
       native_swap: {
-        // @ts-expect-error
         offer_denom: sortedAssets[0].native_token.denom,
-        // @ts-expect-error
         ask_denom: sortedAssets[1].native_token.denom,
       },
     };
@@ -86,9 +89,9 @@ type CreateSwapMsgsOpts = {
   minReceive: string | null;
 };
 
-const createSwapMsgs = (
+export const createSwapMsgs = (
   { swapRoute, token, router, amount, minReceive }: CreateSwapMsgsOpts,
-  sender: string
+  sender: string,
 ): MsgExecuteContract[] | null => {
   if (minReceive == null) {
     return null;
@@ -114,7 +117,7 @@ const createSwapMsgs = (
             minimum_receive: minReceive,
           },
         },
-        [new Coin(token, amount)]
+        [new Coin(token, amount)],
       ),
     ];
   }
@@ -134,9 +137,4 @@ const createSwapMsgs = (
       },
     }),
   ];
-};
-
-export default {
-  simulate,
-  createSwapMsgs,
 };

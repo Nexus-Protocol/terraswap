@@ -1,17 +1,28 @@
 import { useMemo } from "react";
-import { BN, useTerraWebapp } from "@arthuryeti/terra";
+import { num, useTerraWebapp } from "@arthuryeti/terra";
 import { useQuery } from "react-query";
 
-import useContracts from "../../hooks/useContracts";
+import {
+  Routes,
+  SimulationResponse,
+  ReverseSimulationResponse,
+} from "../../types";
+import { useContracts } from "../../hooks/useContracts";
+import { simulate as simulateMultiSwap } from "../multiSwap";
+import { simulate as simulateMonoSwap } from "../monoSwap";
 import { useSwapRoute } from "./useSwapRoute";
-import monoSwap from "../monoSwap";
-import multiSwap from "../multiSwap";
+
+function isTypeReverseSimulationResponse(
+  value: ReverseSimulationResponse | SimulationResponse,
+): value is ReverseSimulationResponse {
+  return value.hasOwnProperty("offer_amount");
+}
 
 type Params = {
-  routes: any;
-  token1: string;
-  token2: string;
-  amount: string;
+  routes: Routes | null;
+  token1: string | null;
+  token2: string | null;
+  amount: string | null;
   reverse: boolean;
 };
 
@@ -27,15 +38,19 @@ export const useSwapSimulate = ({
   const swapRoute = useSwapRoute({ routes, token1, token2 });
   const router = contracts.router;
 
-  const { data, isLoading } = useQuery<unknown, unknown, any>(
+  const { data, isLoading } = useQuery<
+    unknown,
+    unknown,
+    SimulationResponse | ReverseSimulationResponse
+  >(
     ["simulation", swapRoute, router, token1, amount, reverse],
     () => {
-      if (swapRoute == null) {
+      if (swapRoute == null || token1 == null || amount == null) {
         return;
       }
 
       if (swapRoute.length > 1) {
-        return multiSwap.simulate({
+        return simulateMultiSwap({
           client,
           swapRoute,
           router,
@@ -44,7 +59,7 @@ export const useSwapSimulate = ({
         });
       }
 
-      return monoSwap.simulate({
+      return simulateMonoSwap({
         client,
         swapRoute,
         token: token1,
@@ -54,25 +69,25 @@ export const useSwapSimulate = ({
     },
     {
       enabled: swapRoute != null,
-    }
+    },
   );
 
   return useMemo(() => {
-    if (data == null || isLoading) {
+    if (data == null || amount == null || isLoading) {
       return null;
     }
 
     const spread = data.spread_amount;
     const commission = data.commission_amount;
 
-    if (reverse) {
+    if (isTypeReverseSimulationResponse(data)) {
       return {
         amount: data.offer_amount,
         spread,
         commission,
-        price: BN(amount).div(data.offer_amount).toFixed(6).toString(),
-        price2: BN("1")
-          .div(BN(amount).div(data.offer_amount))
+        price: num(amount).div(data.offer_amount).toFixed(6).toString(),
+        price2: num("1")
+          .div(num(amount).div(data.offer_amount))
           .toFixed(6)
           .toString(),
       };
@@ -82,13 +97,13 @@ export const useSwapSimulate = ({
       amount: data.return_amount,
       spread,
       commission,
-      price: BN(amount).div(data.return_amount).toFixed(6).toString(),
-      price2: BN("1")
-        .div(BN(amount).div(data.return_amount))
+      price: num(amount).div(data.return_amount).toFixed(6).toString(),
+      price2: num("1")
+        .div(num(amount).div(data.return_amount))
         .toFixed(6)
         .toString(),
     };
-  }, [amount, data, reverse]);
+  }, [amount, data, isLoading]);
 };
 
 export default useSwapSimulate;

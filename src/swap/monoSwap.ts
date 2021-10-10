@@ -49,9 +49,9 @@ type CreateSwapMsgsOpts = {
   price: string;
 };
 
-const createSwapMsgs = (
+export const createSwapMsgs = (
   { swapRoute, token, amount, slippage, price }: CreateSwapMsgsOpts,
-  sender: string
+  sender: string,
 ): MsgExecuteContract[] => {
   const [{ contract_addr }] = swapRoute;
 
@@ -71,7 +71,7 @@ const createSwapMsgs = (
             belief_price: price,
           },
         },
-        [new Coin(token, amount)]
+        [new Coin(token, amount)],
       ),
     ];
   }
@@ -90,9 +90,4 @@ const createSwapMsgs = (
       },
     }),
   ];
-};
-
-export default {
-  createSwapMsgs,
-  simulate,
 };

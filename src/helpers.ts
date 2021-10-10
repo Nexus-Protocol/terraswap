@@ -5,7 +5,7 @@ const formatPair = (
   routes: Routes,
   pair: PairResponse,
   from: AssetInfo,
-  to: AssetInfo
+  to: AssetInfo,
 ) => {
   const [tokenFrom, tokenTo] = getTokenDenoms([from, to]);
 

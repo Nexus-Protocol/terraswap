@@ -1,4 +1,3 @@
-import React from "react";
 import walletProvider from "@terra-money/wallet-provider";
 import { renderHook } from "@testing-library/react-hooks";
 
