@@ -1,6 +1,6 @@
 {
   "name": "@arthuryeti/terraswap",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "repository": "https://github.com/arthuryeti/terraswap.git",
   "main": "dist/index.js",
   "module": "dist/@arthuryeti/terraswap.esm.js",
