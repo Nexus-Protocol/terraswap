@@ -31,17 +31,15 @@ export const useTotalShareInUst = ({ pool }: Params) => {
       return null;
     }
 
-    const token1TotalPrice = num(token1Price)
-      .div(ONE_TOKEN)
-      .times(tokenAmounts[token1])
-      .toFixed();
+    const totalPrice1 = num(tokenAmounts[token1])
+      .times(token1Price)
+      .div(ONE_TOKEN);
 
-    const token2TotalPrice = num(token2Price)
-      .div(ONE_TOKEN)
-      .times(tokenAmounts[token2])
-      .toFixed();
+    const totalPrice2 = num(tokenAmounts[token2])
+      .times(token2Price)
+      .div(ONE_TOKEN);
 
-    return num(token1TotalPrice).plus(token2TotalPrice).toFixed();
+    return totalPrice1.plus(totalPrice2).toFixed();
   }, [pool, token1, token2, token1Price, token2Price, tokenAmounts]);
 };
 

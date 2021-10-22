@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useWallet } from "@terra-money/wallet-provider";
+import { useTerraWebapp } from "@arthuryeti/terra";
 
 type Contracts = {
   factory: string;
@@ -23,12 +23,15 @@ const defaultContracts: Networks = {
 };
 
 export const useContracts = (initial?: Networks): Contracts => {
-  const { network } = useWallet();
+  const {
+    network: { name },
+  } = useTerraWebapp();
+
   const contracts = initial ?? defaultContracts;
 
   return useMemo(() => {
-    return contracts[network.name];
-  }, [contracts, network]);
+    return contracts[name];
+  }, [contracts, name]);
 };
 
 export default useContracts;

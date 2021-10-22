@@ -1,10 +1,12 @@
 import { useCallback } from "react";
-import { useWallet } from "@terra-money/wallet-provider";
+import { useTerraWebapp } from "@arthuryeti/terra";
 
 import { useTerraswap } from "../context";
 
 export const useTokenInfo = () => {
-  const { network } = useWallet();
+  const {
+    network: { name },
+  } = useTerraWebapp();
   const { data } = useTerraswap();
 
   const getSymbol = useCallback(
@@ -13,9 +15,9 @@ export const useTokenInfo = () => {
         return null;
       }
 
-      return data[network.name].tokens[token].symbol || token;
+      return data[name].tokens[token].symbol || token;
     },
-    [network.name, data],
+    [name, data],
   );
 
   const getIcon = useCallback(
@@ -24,11 +26,11 @@ export const useTokenInfo = () => {
         return null;
       }
 
-      const info = data[network.name].tokens[token];
+      const info = data[name].tokens[token];
 
       return info.icon || null;
     },
-    [network.name, data],
+    [name, data],
   );
 
   return {

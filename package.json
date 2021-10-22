@@ -1,6 +1,6 @@
 {
   "name": "@arthuryeti/terraswap",
-  "version": "0.3.2",
+  "version": "0.0.0-development",
   "repository": "https://github.com/arthuryeti/terraswap.git",
   "main": "dist/index.js",
   "module": "dist/@arthuryeti/terraswap.esm.js",
@@ -18,7 +18,9 @@
     "test": "kcd-scripts test",
     "test:update": "npm test -- --updateSnapshot --coverage",
     "typecheck": "kcd-scripts typecheck",
-    "validate": "kcd-scripts validate"
+    "validate": "kcd-scripts validate",
+    "semantic-release": "semantic-release",
+    "commit": "git-cz"
   },
   "files": [
     "dist",
@@ -32,24 +34,26 @@
   "author": "Arthur Yeti <itey.arthur@gmail.com> (https://arthuryeti.com)",
   "license": "MIT",
   "dependencies": {
-    "@arthuryeti/terra": "^0.3.1",
+    "@arthuryeti/terra": "^1.0.0",
     "@babel/runtime": "^7.15.4",
-    "@terra-money/terra.js": "^2.0.14",
-    "@terra-money/wallet-provider": "^2.2.0",
+    "@terra-money/terra.js": "^2.0.15",
+    "@terra-money/wallet-provider": "^2.3.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/react-hooks": "^7.0.2",
-    "react-query": "^3.26.0"
+    "react-query": "^3.27.0"
   },
   "devDependencies": {
     "@peculiar/webcrypto": "^1.1.7",
-    "@terra-dev/use-wallet": "^2.2.0",
+    "@terra-dev/use-wallet": "^2.3.0",
     "@types/lodash": "^4.14.175",
     "@types/numeral": "^2.0.2",
     "@types/react": "^17.0.27",
     "@types/react-dom": "^17.0.9",
     "@typescript-eslint/parser": "^4.33.0",
     "bignumber.js": "^9.0.1",
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint-config-kentcdodds": "^19.2.0",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.24.2",
@@ -60,8 +64,9 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rimraf": "^3.0.2",
-    "ts-jest": "^27.0.5",
-    "typescript": "^4.4.3"
+    "ts-jest": "^27.0.7",
+    "typescript": "^4.4.4",
+    "semantic-release": "^18.0.0"
   },
   "peerDependencies": {
     "react": "*",
@@ -92,5 +97,10 @@
     "coverage",
     "dist",
     "*.d.ts"
-  ]
+  ],
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  }
 }

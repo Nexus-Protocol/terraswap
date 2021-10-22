@@ -7,7 +7,7 @@ import React, {
   useContext,
   Consumer,
 } from "react";
-import { useWallet } from "@terra-money/wallet-provider";
+import { useTerraWebapp } from "@arthuryeti/terra";
 
 import { PairResponse, Routes, Tokens, Data } from "./types";
 import { formatPairsToRoutes } from "./helpers";
@@ -32,15 +32,17 @@ type Props = {
 };
 
 export const TerraswapProvider: FC<Props> = ({ children, data }) => {
-  const { network } = useWallet();
+  const {
+    network: { name },
+  } = useTerraWebapp();
 
   const pairs = useMemo(() => {
-    return data[network.name].pairs;
-  }, [data, network.name]);
+    return data[name].pairs;
+  }, [data, name]);
 
   const tokens = useMemo(() => {
-    return data[network.name].tokens;
-  }, [data, network.name]);
+    return data[name].tokens;
+  }, [data, name]);
 
   const routes = useMemo(() => {
     if (pairs.length == 0) {
