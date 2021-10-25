@@ -1,11 +1,6 @@
-import {
-  AssetInfo,
-  CW20AssetInfo,
-  NativeAssetInfo,
-  PairResponse,
-} from "./types";
+import { AssetInfo, CW20AssetInfo, NativeAssetInfo, Route } from "./types";
 
-export function isTypeNativeAssetInfo(
+export function isNativeAssetInfo(
   value: NativeAssetInfo | CW20AssetInfo,
 ): value is NativeAssetInfo {
   return value.hasOwnProperty("native_token");
@@ -41,7 +36,7 @@ export const toAsset = ({ amount, token }: ToAssetOpts) => {
 
 export const findAsset = (infos: AssetInfo[], token: string) => {
   const asset = infos.find(info => {
-    if (isTypeNativeAssetInfo(info)) {
+    if (isNativeAssetInfo(info)) {
       return info.native_token.denom === token;
     }
 
@@ -49,19 +44,15 @@ export const findAsset = (infos: AssetInfo[], token: string) => {
   });
 
   if (!asset) {
-    throw new Error("Asset not found");
+    return null;
   }
 
   return asset;
 };
 
-export const createAsset = (
-  from: string,
-  amount: string,
-  route: PairResponse[],
-) => {
-  const [{ asset_infos }] = route;
-  const info = findAsset(asset_infos, from);
+export const createAsset = (amount: string, route: Route[]) => {
+  const [{ from }] = route;
+  const info = toAssetInfo(from);
 
   return {
     info,
@@ -70,7 +61,7 @@ export const createAsset = (
 };
 
 export const getTokenDenom = (info: AssetInfo): string => {
-  if (isTypeNativeAssetInfo(info)) {
+  if (isNativeAssetInfo(info)) {
     return info.native_token.denom;
   }
 

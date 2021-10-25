@@ -3,15 +3,11 @@ import { LCDClient, Coin, MsgExecuteContract } from "@terra-money/terra.js";
 
 import { isNativeAsset, toAsset, createAsset } from "../asset";
 
-import {
-  PairResponse,
-  SimulationResponse,
-  ReverseSimulationResponse,
-} from "../types";
+import { Route, SimulationResponse, ReverseSimulationResponse } from "../types";
 
 type GetQueryParams = {
   client: LCDClient;
-  swapRoute: PairResponse[];
+  swapRoute: Route[];
   token: string;
   amount: string;
   reverse?: boolean;
@@ -42,7 +38,7 @@ export const simulate = ({
 };
 
 type CreateSwapMsgsOpts = {
-  swapRoute: PairResponse[];
+  swapRoute: Route[];
   token: string;
   amount: string;
   slippage: string;
@@ -55,7 +51,7 @@ export const createSwapMsgs = (
 ): MsgExecuteContract[] => {
   const [{ contract_addr }] = swapRoute;
 
-  const offerAsset = createAsset(token, amount, swapRoute);
+  const offerAsset = createAsset(amount, swapRoute);
 
   const isNative = isNativeAsset(offerAsset.info);
 

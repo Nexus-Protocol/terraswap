@@ -103,6 +103,10 @@ export type ReverseSimulationResponse = {
   spread_amount: string;
 };
 
+export type MultiSimulationResponse = {
+  amount: string;
+};
+
 export type NativeSwapOperation = {
   native_swap: {
     offer_denom: string;

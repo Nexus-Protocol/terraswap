@@ -29,14 +29,14 @@ export const useSwap = ({
   const { routes } = useTerraswap();
   const address = useAddress();
   const contracts = useContracts();
-  const swapRoute = useSwapRoute({ routes, token1, token2 });
+  const swapRoute = useSwapRoute({ routes, from: token1, to: token2 });
   const router = contracts.router;
 
   const simulated = useSwapSimulate({
     routes,
     amount: amount ?? "1000000",
-    token1,
-    token2,
+    from: token1,
+    to: token2,
     reverse: false,
   });
 

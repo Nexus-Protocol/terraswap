@@ -9,12 +9,12 @@ import React, {
 } from "react";
 import { useTerraWebapp } from "@arthuryeti/terra";
 
-import { PairResponse, Routes, Tokens, Data } from "./types";
+import { PairResponse, Route, Tokens, Data } from "./types";
 import { formatPairsToRoutes } from "./helpers";
 
 type Terraswap = {
   pairs: PairResponse[] | null;
-  routes: Routes | null;
+  routes: Route[] | null;
   tokens: Tokens | null;
   data: Data | null;
 };
@@ -48,8 +48,11 @@ export const TerraswapProvider: FC<Props> = ({ children, data }) => {
     if (pairs.length == 0) {
       return null;
     }
+
     return formatPairsToRoutes(pairs);
   }, [pairs]);
+
+  console.log("routes", routes);
 
   return (
     <TerraswapContext.Provider

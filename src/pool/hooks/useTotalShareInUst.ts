@@ -18,6 +18,12 @@ export const useTotalShareInUst = ({ pool }: Params) => {
   const token2Price = useTokenPriceInUst(token2);
   const tokenAmounts = useLpToTokens({ pool, amount: pool?.total_share });
 
+  console.log("token1", token1);
+  console.log("token2", token2);
+  console.log("token1Price", token1Price);
+  console.log("token2Price", token2Price);
+  console.log("tokenAmounts", tokenAmounts);
+
   return useMemo(() => {
     if (
       pool == null ||

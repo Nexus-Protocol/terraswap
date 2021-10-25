@@ -1,22 +1,20 @@
 import { toBase64 } from "@arthuryeti/terra";
 import { LCDClient, Coin, MsgExecuteContract } from "@terra-money/terra.js";
 
-import { PairResponse, SwapOperation } from "../types";
+import { SwapOperation, Route } from "../types";
 import {
-  getTokenDenom,
+  toAssetInfo,
   isNativeAsset,
   findAsset,
-  isTypeNativeAssetInfo,
+  isNativeAssetInfo,
 } from "../asset";
 
 type GetSwapOperationsParams = {
-  token: string;
-  swapRoute: PairResponse[] | null;
+  swapRoute: Route[] | null;
   operations?: SwapOperation[];
 };
 
 export const getSwapOperations = ({
-  token,
   swapRoute,
   operations = [],
 }: GetSwapOperationsParams): SwapOperation[] => {
@@ -24,32 +22,25 @@ export const getSwapOperations = ({
     return operations;
   }
 
-  const [{ asset_infos }] = swapRoute;
-
-  const sortedAssets = [...asset_infos].sort(a => {
-    return getTokenDenom(a) === token ? -1 : 1;
-  });
+  const [{ from, to }] = swapRoute;
 
   let operation: SwapOperation = {
     terra_swap: {
-      offer_asset_info: sortedAssets[0],
-      ask_asset_info: sortedAssets[1],
+      offer_asset_info: toAssetInfo(from),
+      ask_asset_info: toAssetInfo(to),
     },
   };
 
-  if (sortedAssets.every(isTypeNativeAssetInfo)) {
+  if ([toAssetInfo(from), toAssetInfo(to)].every(isNativeAssetInfo)) {
     operation = {
       native_swap: {
-        offer_denom: sortedAssets[0].native_token.denom,
-        ask_denom: sortedAssets[1].native_token.denom,
+        offer_denom: from,
+        ask_denom: to,
       },
     };
   }
 
-  const nextToken = getTokenDenom(sortedAssets[1]);
-
   return getSwapOperations({
-    token: nextToken,
     swapRoute: swapRoute.slice(1),
     operations: [...operations, operation],
   });
@@ -58,7 +49,7 @@ export const getSwapOperations = ({
 type GetQueryParams = {
   client: LCDClient;
   router: string;
-  swapRoute: PairResponse[];
+  swapRoute: Route[];
   token: string;
   amount: string;
   reverse?: boolean;
@@ -68,10 +59,9 @@ export const simulate = ({
   client,
   swapRoute,
   router,
-  token,
   amount,
 }: GetQueryParams) => {
-  const operations = getSwapOperations({ token, swapRoute });
+  const operations = getSwapOperations({ swapRoute });
 
   return client.wasm.contractQuery(router, {
     simulate_swap_operations: {
@@ -82,7 +72,7 @@ export const simulate = ({
 };
 
 type CreateSwapMsgsOpts = {
-  swapRoute: PairResponse[];
+  swapRoute: Route[];
   router: string;
   token: string;
   amount: string;
@@ -97,13 +87,19 @@ export const createSwapMsgs = (
     return null;
   }
 
-  const [{ asset_infos }] = swapRoute;
+  const [{ to, from }] = swapRoute;
 
-  const info = findAsset(asset_infos, token);
+  const assetInfos = [toAssetInfo(from), toAssetInfo(to)];
+
+  const info = findAsset(assetInfos, token);
+
+  if (info == null) {
+    return null;
+  }
 
   const isNative = isNativeAsset(info);
 
-  const operations = getSwapOperations({ token, swapRoute });
+  const operations = getSwapOperations({ swapRoute });
 
   if (isNative) {
     return [

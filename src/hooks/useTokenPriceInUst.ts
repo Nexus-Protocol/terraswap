@@ -9,8 +9,8 @@ export const useTokenPriceInUst = (token1: string | null) => {
   const data = useSwapSimulate({
     routes,
     amount: String(ONE_TOKEN),
-    token1,
-    token2: ESTIMATE_TOKEN,
+    from: token1,
+    to: ESTIMATE_TOKEN,
     reverse: false,
   });
 

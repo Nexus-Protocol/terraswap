@@ -3,39 +3,49 @@ import { num, useTerraWebapp } from "@arthuryeti/terra";
 import { useQuery } from "react-query";
 
 import {
-  Routes,
+  Route,
   SimulationResponse,
   ReverseSimulationResponse,
+  MultiSimulationResponse,
 } from "../../types";
 import { useContracts } from "../../hooks/useContracts";
 import { simulate as simulateMultiSwap } from "../multiSwap";
 import { simulate as simulateMonoSwap } from "../monoSwap";
 import { useSwapRoute } from "./useSwapRoute";
 
-function isTypeReverseSimulationResponse(
+function isMultiSimulation(
+  value:
+    | ReverseSimulationResponse
+    | SimulationResponse
+    | MultiSimulationResponse,
+): value is MultiSimulationResponse {
+  return value.hasOwnProperty("amount");
+}
+
+function isReverseSimulation(
   value: ReverseSimulationResponse | SimulationResponse,
 ): value is ReverseSimulationResponse {
   return value.hasOwnProperty("offer_amount");
 }
 
 type Params = {
-  routes: Routes | null;
-  token1: string | null;
-  token2: string | null;
+  routes: Route[] | null;
+  from: string | null;
+  to: string | null;
   amount: string | null;
   reverse: boolean;
 };
 
 export const useSwapSimulate = ({
   routes,
-  token1,
-  token2,
+  from,
+  to,
   amount,
   reverse,
 }: Params) => {
   const { client } = useTerraWebapp();
   const contracts = useContracts();
-  const swapRoute = useSwapRoute({ routes, token1, token2 });
+  const swapRoute = useSwapRoute({ routes, from, to });
   const router = contracts.router;
 
   const { data, isLoading } = useQuery<
@@ -43,9 +53,9 @@ export const useSwapSimulate = ({
     unknown,
     SimulationResponse | ReverseSimulationResponse
   >(
-    ["simulation", swapRoute, router, token1, amount, reverse],
+    ["simulation", swapRoute, router, from, amount, reverse],
     () => {
-      if (swapRoute == null || token1 == null || amount == null) {
+      if (swapRoute == null || from == null || amount == null) {
         return;
       }
 
@@ -54,7 +64,7 @@ export const useSwapSimulate = ({
           client,
           swapRoute,
           router,
-          token: token1,
+          token: from,
           amount,
         });
       }
@@ -62,7 +72,7 @@ export const useSwapSimulate = ({
       return simulateMonoSwap({
         client,
         swapRoute,
-        token: token1,
+        token: from,
         amount,
         reverse,
       });
@@ -77,10 +87,23 @@ export const useSwapSimulate = ({
       return null;
     }
 
+    if (isMultiSimulation(data)) {
+      return {
+        amount: data.amount,
+        spread: "0",
+        commission: "0",
+        price: num(amount).div(data.amount).toFixed(6).toString(),
+        price2: num("1")
+          .div(num(amount).div(data.amount))
+          .toFixed(6)
+          .toString(),
+      };
+    }
+
     const spread = data.spread_amount;
     const commission = data.commission_amount;
 
-    if (isTypeReverseSimulationResponse(data)) {
+    if (isReverseSimulation(data)) {
       return {
         amount: data.offer_amount,
         spread,
