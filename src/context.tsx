@@ -52,8 +52,6 @@ export const TerraswapProvider: FC<Props> = ({ children, data }) => {
     return formatPairsToRoutes(pairs);
   }, [pairs]);
 
-  console.log("routes", routes);
-
   return (
     <TerraswapContext.Provider
       value={{
