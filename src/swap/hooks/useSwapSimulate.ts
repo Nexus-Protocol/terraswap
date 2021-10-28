@@ -55,7 +55,12 @@ export const useSwapSimulate = ({
   >(
     ["simulation", swapRoute, router, from, amount, reverse],
     () => {
-      if (swapRoute == null || from == null || amount == null) {
+      if (
+        swapRoute == null ||
+        from == null ||
+        amount == null ||
+        swapRoute.length == 0
+      ) {
         return;
       }
 

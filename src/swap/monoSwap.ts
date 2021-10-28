@@ -20,6 +20,10 @@ export const simulate = ({
   amount,
   reverse = false,
 }: GetQueryParams) => {
+  if (swapRoute[0] == null) {
+    return null;
+  }
+
   const { contract_addr } = swapRoute[0];
 
   if (reverse) {
