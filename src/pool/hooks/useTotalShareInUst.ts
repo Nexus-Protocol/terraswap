@@ -5,18 +5,22 @@ import { getTokenDenom } from "../../asset";
 import { PoolResponse } from "../../types";
 import { useTokenPriceInUst } from "../../hooks/useTokenPriceInUst";
 import { ONE_TOKEN } from "../../constants";
-import { useLpToTokens } from "./useLpToTokens";
 
 type Params = {
-  pool: PoolResponse | null;
+  pool: PoolResponse;
 };
 
 export const useTotalShareInUst = ({ pool }: Params) => {
-  const token1 = pool && getTokenDenom(pool.assets[0].info);
-  const token2 = pool && getTokenDenom(pool.assets[1].info);
+  const token1 = getTokenDenom(pool.assets[0].info);
+  const token2 = getTokenDenom(pool.assets[1].info);
   const token1Price = useTokenPriceInUst(token1);
   const token2Price = useTokenPriceInUst(token2);
-  const tokenAmounts = useLpToTokens({ pool, amount: pool?.total_share });
+  const tokenAmounts = useMemo(() => {
+    return {
+      [getTokenDenom(pool.assets[0].info)]: pool.assets[0].amount,
+      [getTokenDenom(pool.assets[1].info)]: pool.assets[1].amount,
+    };
+  }, [pool]);
 
   return useMemo(() => {
     if (
