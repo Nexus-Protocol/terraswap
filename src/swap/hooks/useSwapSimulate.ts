@@ -97,11 +97,8 @@ export const useSwapSimulate = ({
         amount: data.amount,
         spread: "0",
         commission: "0",
-        price: num(amount).div(data.amount).toFixed(6).toString(),
-        price2: num("1")
-          .div(num(amount).div(data.amount))
-          .toFixed(6)
-          .toString(),
+        price: num(amount).div(data.amount).toString(),
+        price2: num("1").div(num(amount).div(data.amount)).toString(),
       };
     }
 
@@ -113,11 +110,8 @@ export const useSwapSimulate = ({
         amount: data.offer_amount,
         spread,
         commission,
-        price: num(amount).div(data.offer_amount).toFixed(6).toString(),
-        price2: num("1")
-          .div(num(amount).div(data.offer_amount))
-          .toFixed(6)
-          .toString(),
+        price: num(amount).div(data.offer_amount).toString(),
+        price2: num("1").div(num(amount).div(data.offer_amount)).toString(),
       };
     }
 
@@ -125,11 +119,8 @@ export const useSwapSimulate = ({
       amount: data.return_amount,
       spread,
       commission,
-      price: num(amount).div(data.return_amount).toFixed(6).toString(),
-      price2: num("1")
-        .div(num(amount).div(data.return_amount))
-        .toFixed(6)
-        .toString(),
+      price: num(amount).div(data.return_amount).toString(),
+      price2: num("1").div(num(amount).div(data.return_amount)).toString(),
     };
   }, [amount, data, isLoading]);
 };

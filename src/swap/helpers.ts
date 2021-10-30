@@ -10,9 +10,8 @@ export const minAmountReceive = ({
   maxSpread,
 }: minAmountReceiveParams): string => {
   const rate1 = num("1").minus(maxSpread);
-  const rate2 = num("1").minus("0.003"); // terraswap commission
 
-  return num(amount).times(rate1).times(rate2).toString();
+  return num(amount).times(rate1).toString();
 };
 
 type PriceImpactParams = {
