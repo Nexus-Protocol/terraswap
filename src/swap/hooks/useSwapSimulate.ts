@@ -11,7 +11,6 @@ import {
 import { useContracts } from "../../hooks/useContracts";
 import { simulate as simulateMultiSwap } from "../multiSwap";
 import { simulate as simulateMonoSwap } from "../monoSwap";
-import { useSwapRoute } from "./useSwapRoute";
 
 function isMultiSimulation(
   value:
@@ -29,35 +28,31 @@ function isReverseSimulation(
 }
 
 type Params = {
-  routes: Route[] | null;
-  from: string | null;
-  to: string | null;
+  swapRoute: Route[] | null;
+  token: string | null;
   amount: string | null;
   reverse: boolean;
 };
 
 export const useSwapSimulate = ({
-  routes,
-  from,
-  to,
+  swapRoute,
+  token,
   amount,
   reverse,
 }: Params) => {
   const { client } = useTerraWebapp();
-  const contracts = useContracts();
-  const swapRoute = useSwapRoute({ routes, from, to });
-  const router = contracts.router;
+  const { router } = useContracts();
 
   const { data, isLoading } = useQuery<
     unknown,
     unknown,
     SimulationResponse | ReverseSimulationResponse
   >(
-    ["simulation", swapRoute, router, from, amount, reverse],
+    ["simulation", swapRoute, router, token, amount, reverse],
     () => {
       if (
         swapRoute == null ||
-        from == null ||
+        token == null ||
         amount == null ||
         swapRoute.length == 0
       ) {
@@ -69,7 +64,7 @@ export const useSwapSimulate = ({
           client,
           swapRoute,
           router,
-          token: from,
+          token,
           amount,
         });
       }
@@ -77,7 +72,7 @@ export const useSwapSimulate = ({
       return simulateMonoSwap({
         client,
         swapRoute,
-        token: from,
+        token,
         amount,
         reverse,
       });

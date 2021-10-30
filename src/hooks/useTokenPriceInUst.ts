@@ -1,20 +1,20 @@
 import { num } from "@arthuryeti/terra";
 import { ONE_TOKEN, ESTIMATE_TOKEN } from "../constants";
 import { useTerraswap } from "../context";
-import { useSwapSimulate } from "../swap";
+import { useSwapSimulate, useSwapRoute } from "../swap";
 
-export const useTokenPriceInUst = (token1: string | null) => {
+export const useTokenPriceInUst = (token: string | null) => {
   const { routes } = useTerraswap();
+  const swapRoute = useSwapRoute({ routes, from: token, to: ESTIMATE_TOKEN });
 
   const data = useSwapSimulate({
-    routes,
+    swapRoute,
     amount: String(ONE_TOKEN),
-    from: token1,
-    to: ESTIMATE_TOKEN,
+    token,
     reverse: false,
   });
 
-  if (token1 == "uusd") {
+  if (token == "uusd") {
     return String(ONE_TOKEN);
   }
 
