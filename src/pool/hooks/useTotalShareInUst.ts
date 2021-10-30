@@ -7,15 +7,19 @@ import { useTokenPriceInUst } from "../../hooks/useTokenPriceInUst";
 import { ONE_TOKEN } from "../../constants";
 
 type Params = {
-  pool: PoolResponse;
+  pool: PoolResponse | null;
 };
 
 export const useTotalShareInUst = ({ pool }: Params) => {
-  const token1 = getTokenDenom(pool.assets[0].info);
-  const token2 = getTokenDenom(pool.assets[1].info);
+  const token1 = pool && getTokenDenom(pool.assets[0].info);
+  const token2 = pool && getTokenDenom(pool.assets[1].info);
   const token1Price = useTokenPriceInUst(token1);
   const token2Price = useTokenPriceInUst(token2);
   const tokenAmounts = useMemo(() => {
+    if (pool == null) {
+      return null;
+    }
+
     return {
       [getTokenDenom(pool.assets[0].info)]: pool.assets[0].amount,
       [getTokenDenom(pool.assets[1].info)]: pool.assets[1].amount,
