@@ -40,15 +40,15 @@ export const useSwap = ({
   });
 
   const minReceive = useMemo(() => {
-    if (simulated == null) {
+    if (simulated == null || amount2 == null) {
       return null;
     }
 
     return minAmountReceive({
-      amount: simulated.amount,
+      amount: reverse ? amount2 : simulated.amount,
       maxSpread: slippage,
     });
-  }, [simulated, slippage]);
+  }, [simulated, slippage, amount2, reverse]);
 
   const msgs = useMemo(() => {
     if (

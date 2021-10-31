@@ -93,7 +93,6 @@ export const useSwapSimulate = ({
         spread: "0",
         commission: "0",
         price: num(amount).div(data.amount).toString(),
-        price2: num("1").div(num(amount).div(data.amount)).toString(),
       };
     }
 
@@ -105,8 +104,7 @@ export const useSwapSimulate = ({
         amount: data.offer_amount,
         spread,
         commission,
-        price: num(amount).div(data.offer_amount).toString(),
-        price2: num("1").div(num(amount).div(data.offer_amount)).toString(),
+        price: num(data.offer_amount).div(amount).toString(),
       };
     }
 
@@ -115,7 +113,6 @@ export const useSwapSimulate = ({
       spread,
       commission,
       price: num(amount).div(data.return_amount).toString(),
-      price2: num("1").div(num(amount).div(data.return_amount)).toString(),
     };
   }, [amount, data, isLoading]);
 };
