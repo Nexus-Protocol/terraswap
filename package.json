@@ -34,7 +34,7 @@
   "author": "Arthur Yeti <itey.arthur@gmail.com> (https://arthuryeti.com)",
   "license": "MIT",
   "dependencies": {
-    "@arthuryeti/terra": "^1.0.2",
+    "@arthuryeti/terra": "^1.0.5",
     "@babel/runtime": "^7.15.4",
     "@terra-money/terra.js": "2.0.14",
     "@terra-money/wallet-provider": "^2.3.0",
