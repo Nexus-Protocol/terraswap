@@ -13,12 +13,12 @@ type Networks = {
 
 const defaultContracts: Networks = {
   mainnet: {
-    factory: "terra1ulgw0td86nvs4wtpsc80thv6xelk76ut7a7apj",
-    router: "terra19qx5xe6q9ll4w0890ux7lv2p4mf3csd4qvt3ex",
+    factory: "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g",
+    router: "terra16t7dpwwgx9n3lq6l6te3753lsjqwhxwpday9zx",
   },
   testnet: {
-    factory: "terra18qpjm4zkvqnpjpw0zn0tdr8gdzvt8au35v45xf",
-    router: "terra14z80rwpd0alzj4xdtgqdmcqt9wd9xj5ffd60wp",
+    factory: "terra15jsahkaf9p0qu8ye873p0u5z6g07wdad0tdq43",
+    router: "terra13wf295fj9u209nknz2cgqmmna7ry3d3j5kv7t4",
   },
 };
 
